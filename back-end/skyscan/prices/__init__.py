@@ -90,4 +90,4 @@ def get_prices_from_cities(cities, origin_airport='CPH',start_month='2018-07',en
     price_data[city] = get_cheapest_flight_info(resp)
   return price_data
 
-get_prices_from_cities(['paris','edmonton','berlin'])
+# get_prices_from_cities(['paris','edmonton','berlin'])
