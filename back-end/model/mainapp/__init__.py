@@ -10,8 +10,6 @@ app = Flask(__name__, static_url_path='/static')
 def test():
     # if 'text_list' in request.json and isinstance(request.json['text_list'], list):
     #   strings_list = request.json['text_list']
-    strings_list = ['aa', 'bb', 'cc', 'dd']
+    strings_list = ['This is great, I am so happy','omg, life sucks so much']
 
-
-s 
     return jsonify(get_sentiment(strings_list))
