@@ -2,31 +2,12 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
 <script src="/datamaps.world.min.js"></script>
 <link rel="stylesheet" type="text/css" href="style.css">
-<div id="container" style="position: relative; width: 100%; height: 100%;"></div>
+<div id="flightsTable"></div>
+<div id="container" style="position: relative; width: 100%; height: 100%;">
+</div>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-  // var responseData = {
-  //   "POL": {
-  //     "city": "Warsaw",
-  //     "sentiment": 0.5,
-  //     "flight": {
-  //       "price": 200,
-  //       "date": "01.02.1993",
-  //       "airlineLogo": "lot.png"
-  //     }
-  //   },
-  //   "ESP": {
-  //     "city": "Madrid",
-  //     "sentiment": 1,
-  //     "flight": {
-  //       "price": 100,
-  //       "date": "30.02.2018",
-  //       "airlineLogo": "lot.png"
-  //     }
-  //   }
-  // }
-
   async function get_data(){
     do_loading()
     await axios.get('http://127.0.0.1:8001/get_data')
@@ -44,16 +25,6 @@
     return responseData;
   }
   get_data();
-
-  // console.log("response", responseData);
-
-  // var colorSetup = responseData.map(function(el){
-  //   console.log(el);
-  // })
-
-  // colorSetup = Object.keys(responseData).map(function(key, index) {
-  //   return { key: responseData[key]["sentiment"] }
-  // });
 
   function do_loading(){
     var mydiv = document.getElementById("container");
@@ -109,8 +80,6 @@
     return previous;
   }, {});
 
-  console.log(colorSetup)
-
   var fillsSetup = Object.keys(responseData).reduce(function(previous, current) {
     previous[current] = mapIntToColor(colors, responseData[current]["sentiment"]);
     return previous;
@@ -121,9 +90,6 @@
     previous[current] = { fillKey: current };
     return previous;
   }, {});
-
-  console.log(fillsSetup);
-  console.log(dataSetup);
 
   var map = new Datamap({setProjection: function(element) {
     var projection = d3.geo.equirectangular()
