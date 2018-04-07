@@ -12,9 +12,12 @@ CORS(app)
 print("CORS ADDED")
 
 @app.route("/get_prices", methods=['POST'])
-def test():
-  if 'text_list' in request.json and isinstance(request.json['text_list'], list):
-    strings_list = request.json['text_list']
+def get_prices():
+  if 'cities_list' in request.json and isinstance(request.json['cities_list'], list):
+    strings_list = request.json['cities_list']
+  
+  month = "2018-04"
+  if 'month' in request.json and isinstance(request.json['month'], str):
+    month = request.json['month']
 
-  return jsonify(get_prices_from_cities(strings_list))
-
+  return jsonify(get_prices_from_cities(strings_list, start_month=month, end_month=month))

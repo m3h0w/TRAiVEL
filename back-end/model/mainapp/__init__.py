@@ -2,7 +2,7 @@
 from flask import Flask
 from flask import jsonify, request
 
-from sentiment import get_sentiment_list
+from sentiment import get_sentiment_list_from_azure
 
 from flask_cors import CORS
 
@@ -12,12 +12,13 @@ CORS(app)
 print("CORS ADDED")
 
 @app.route("/get_sentiment", methods=['POST'])
-def test():
+def get_sentiment():
+  print(request.json)
   if 'text_list' in request.json and isinstance(request.json['text_list'], list):
     strings_list = request.json['text_list']
   # strings_list = ['This is great, I am so happy','omg, life sucks so much']
 
-  return jsonify(get_sentiment_list(strings_list))
+  return jsonify(get_sentiment_list_from_azure(strings_list))
 
 @app.route("/display_sentiment", methods=['GET'])
 def display_sentiment():
