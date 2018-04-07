@@ -1,7 +1,7 @@
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import numpy as np
 
-def get_sentiment(sentences):
+def get_sentiment_list(sentences):
   sa = SentimentIntensityAnalyzer()
   sentiments = []
   for sentence in sentences:

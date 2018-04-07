@@ -1,0 +1,37 @@
+<!-- <a href="/">BACK</a>
+<form action="http://127.0.0.1:8080/" method="POST">
+    Package
+    <input type="submit" value="Submit">
+</form> 
+<button onclick="get_personas()">Personas</button> -->
+<div id="personas"></div>
+<!--<button onclick="import_insurances()">Import Insurances</button>
+<div id="names"></div>
+<button onclick="get_insurances()">Display Insurances from DB</button>
+<div id="names"></div> -->
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+// axios.defaults.headers.post['Content-Type'] = 'application/json';
+
+let names_list = []
+
+function get_personas() {
+    axios.get('http://127.0.0.1:8002/display_sentiment', {
+      headers:{
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(response){
+            data = response.data
+            // names_list = data.map(el => el.name)
+            console.log(data); // ex.: { user: 'Your User'}
+            console.log(response.status); // ex.: 200
+            document.getElementById("personas").innerHTML = data;
+
+            document.getElementById('personas').appendChild(makeRB(data));
+        });  
+}
+
+get_personas()
+</script>
