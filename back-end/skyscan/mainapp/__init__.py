@@ -12,7 +12,7 @@ CORS(app)
 print("CORS ADDED")
 
 @app.route("/get_prices", methods=['POST'])
-def test():
+def get_prices():
   if 'cities_list' in request.json and isinstance(request.json['cities_list'], list):
     strings_list = request.json['cities_list']
   
