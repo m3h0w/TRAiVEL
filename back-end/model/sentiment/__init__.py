@@ -53,6 +53,7 @@ def get_language_list(sentence_list):
   return languages
 
 def parseAzureResponseToList(response):
+  print(response)
   responses = response['documents']
   return [el['detectedLanguages'][0]['iso6391Name'] for el in responses ]
 
@@ -73,12 +74,12 @@ def get_sentiment_list_from_azure(sentence_list,language=None):
   else:
     language_list = [language] * len(sentence_list)
 
-  documents = {'documents' : [
-    {'id': '1', 'language': 'en', 'text': 'I had a wonderful experience! The rooms were wonderful and the staff was helpful.'},
-    {'id': '2', 'language': 'en', 'text': 'I had a terrible time at the hotel. The staff was rude and the food was awful.'},  
-    {'id': '3', 'language': 'es', 'text': 'Los caminos que llevan hasta Monte Rainier son espectaculares y hermosos.'},  
-    {'id': '4', 'language': 'es', 'text': 'La carretera estaba atascada. Había mucho tráfico el día de ayer.'}
-  ]}
+  # documents = {'documents' : [
+  #   {'id': '1', 'language': 'en', 'text': 'I had a wonderful experience! The rooms were wonderful and the staff was helpful.'},
+  #   {'id': '2', 'language': 'en', 'text': 'I had a terrible time at the hotel. The staff was rude and the food was awful.'},  
+  #   {'id': '3', 'language': 'es', 'text': 'Los caminos que llevan hasta Monte Rainier son espectaculares y hermosos.'},  
+  #   {'id': '4', 'language': 'es', 'text': 'La carretera estaba atascada. Había mucho tráfico el día de ayer.'}
+  # ]}
 
   documents = {'documents':[]}
   for i in range(len(sentence_list)):
@@ -94,9 +95,10 @@ def get_sentiment_list_from_azure(sentence_list,language=None):
   sentiment_list = [sent['score'] for sent in sentiments['documents']]
 
   print(sentiment_list)
+  return sentiment_list
 
 
-sent = ['This is great, I am so happy','omg, life sucks so much']
+# sent = ['This is great, I am so happy','omg, life sucks so much']
 
-#get_language_from_azure(sent)
-get_sentiment_list_from_azure(sent,'en')
+# #get_language_from_azure(sent)
+# get_sentiment_list_from_azure(sent,'en')
