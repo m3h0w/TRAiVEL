@@ -94,9 +94,6 @@ def get_prices_from_cities(cities,start_date,end_date,origin_city='Copenhagen',c
     price_data[dest_city] = get_cheapest_price_for_flight(origin_city_code,dest_city_code,start_date,end_date)
   return price_data
 
-<<<<<<< HEAD
 #start,end = get_next_friday_sunday()
 #get_prices_from_cities(['Amsterdam','Berlin','Warsaw','Moscow'],start,end,origin_city='Copenhagen',currency='EUR')
-=======
-# get_prices_from_cities(['paris','edmonton','berlin'])
->>>>>>> 877ecb319eecc62eca6b4e011be97263c1c743fc
+
