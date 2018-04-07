@@ -12,7 +12,7 @@ CORS(app)
 print("CORS ADDED")
 
 @app.route("/get_sentiment", methods=['POST'])
-def test():
+def get_sentiment():
   if 'text_list' in request.json and isinstance(request.json['text_list'], list):
     strings_list = request.json['text_list']
   # strings_list = ['This is great, I am so happy','omg, life sucks so much']
