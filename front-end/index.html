@@ -1,45 +1,44 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
 <script src="/datamaps.world.min.js"></script>
-<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="index_style.css">
 <div id="container" style="position: relative; width: 100%; height: 100%;"></div>
 
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-  // var responseData = {
-  //   "POL": {
-  //     "city": "Warsaw",
-  //     "sentiment": 0.5,
-  //     "flight": {
-  //       "price": 200,
-  //       "date": "01.02.1993",
-  //       "airlineLogo": "lot.png"
-  //     }
-  //   },
-  //   "ESP": {
-  //     "city": "Madrid",
-  //     "sentiment": 1,
-  //     "flight": {
-  //       "price": 100,
-  //       "date": "30.02.2018",
-  //       "airlineLogo": "lot.png"
-  //     }
-  //   }
-  // }
-
   async function get_data(){
     do_loading()
-    await axios.get('http://127.0.0.1:8001/get_data')
-    .then(function(response){
-      responseData = response.data
-      // names_list = data.map(el => el.name)
-      console.log(responseData); // ex.: { user: 'Your User'}
-      console.log(response.status); // ex.: 200
-      // document.getElementById("personas").innerHTML = data;
+    // await axios.get('http://127.0.0.1:8001/get_data')
+    // .then(function(response){
+    //   responseData = response.data
+    //   // names_list = data.map(el => el.name)
+    //   console.log(responseData); // ex.: { user: 'Your User'}
+    //   console.log(response.status); // ex.: 200
+    //   // document.getElementById("personas").innerHTML = data;
 
-      // document.getElementById('personas').appendChild(makeRB(data));
-      return
-    });
+    //   // document.getElementById('personas').appendChild(makeRB(data));
+    //   return
+    // });
+    var responseData = {
+      "POL": {
+        "city": "Warsaw",
+        "sentiment": 0.5,
+        "flight": {
+          "price": 200,
+          "date": "01.02.1993",
+          "airlineLogo": "lot.png"
+        }
+      },
+      "ESP": {
+        "city": "Madrid",
+        "sentiment": 1,
+        "flight": {
+          "price": 100,
+          "date": "30.02.2018",
+          "airlineLogo": "lot.png"
+        }
+      }
+    }
     all(responseData);
     return responseData;
   }
@@ -118,12 +117,30 @@
   fillsSetup['defaultFill'] = "#AAA"
 
   var dataSetup = Object.keys(responseData).reduce(function(previous, current) {
-    previous[current] = { fillKey: current };
+    console.log("prev", previous, "curr", current)
+    previous[current] = { 
+      fillKey: current, 
+      price: responseData[current]['flight']['price'],
+      date: responseData[current]['flight']['date'],
+      city: responseData[current]['city']
+    };
     return previous;
   }, {});
 
-  console.log(fillsSetup);
-  console.log(dataSetup);
+  var geographyConfig = {
+    highlightBorderColor: '#bada55',
+    popupTemplate: function(geography, data) {
+      return '<div class="hoverinfo">' +
+        '<div class="name">' + geography.properties.name + ', ' + data.city + '</div>' +
+        '<div class="price">' +
+        'Price: ' +  data.price + ' ' +
+        '</div>' +
+        '<div class="date">' +
+        'Date: ' +  data.date + ' ' +
+        '</div>'
+    },
+    highlightBorderWidth: 3
+  }
 
   var map = new Datamap({setProjection: function(element) {
     var projection = d3.geo.equirectangular()
@@ -135,10 +152,26 @@
         .projection(projection);
       return {path: path, projection: projection};
   },
+  geographyConfig: geographyConfig,
   fills: fillsSetup,
   data: dataSetup,
   element: document.getElementById('container')});
+
+    map.arc([
+  {
+    origin: {
+          latitude: 52.2297,
+          longitude: 21.0122
+      },
+    destination: {
+          latitude: 55.6761,
+          longitude: 12.5683
+      }
+  }
+  ],  {strokeWidth: 1, arcSharpness: 1.4});
   }
 
-   
+
+
+   console.log("AFTER ARCS")
 </script>
