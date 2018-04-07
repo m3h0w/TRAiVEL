@@ -10,17 +10,37 @@
 <script>
   async function get_data(){
     do_loading()
-    await axios.get('http://127.0.0.1:8001/get_data')
-    .then(function(response){
-      responseData = response.data
-      // names_list = data.map(el => el.name)
-      console.log(responseData); // ex.: { user: 'Your User'}
-      console.log(response.status); // ex.: 200
-      // document.getElementById("personas").innerHTML = data;
+    // await axios.get('http://127.0.0.1:8001/get_data')
+    // .then(function(response){
+    //   responseData = response.data
+    //   // names_list = data.map(el => el.name)
+    //   console.log(responseData); // ex.: { user: 'Your User'}
+    //   console.log(response.status); // ex.: 200
+    //   // document.getElementById("personas").innerHTML = data;
 
-      // document.getElementById('personas').appendChild(makeRB(data));
-      return
-    });
+    //   // document.getElementById('personas').appendChild(makeRB(data));
+    //   return
+    // });
+    var responseData = {
+      "POL": {
+        "city": "Warsaw",
+        "sentiment": 0.5,
+        "flight": {
+          "price": 200,
+          "date": "01.02.1993",
+          "airlineLogo": "lot.png"
+        }
+      },
+      "ESP": {
+        "city": "Madrid",
+        "sentiment": 1,
+        "flight": {
+          "price": 100,
+          "date": "30.02.2018",
+          "airlineLogo": "lot.png"
+        }
+      }
+    }
     all(responseData);
     return responseData;
   }
