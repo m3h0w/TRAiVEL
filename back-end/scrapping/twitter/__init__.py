@@ -13,11 +13,14 @@ tw_acc_token_sec = os.environ['TW_ACC_TOKEN_SEC']
 
 api = TwitterAPI(tw_api_key, tw_api_key_sec, tw_acc_token, tw_acc_token_sec)
 
-max_tweets = 2000
-city_list = ['Copenhagen','Warsaw','London','Berlin','Amsterdam','Paris']
+max_tweets = 1000
+city_list = ['Lisbon','Rome','Vienna','Zurich','Oslo','Stockholm','Helsinki','Moscow','Copenhagen','Berlin','Warsaw','Paris','London','Dublin','Amsterdam','Bruxelles','Madrid']
+country_dic = {'Copenhagen':'Denmark','Berlin':'Germany','Warsaw':'Poland','Paris':'France','London':'England','Dublin':'Ireland','Amsterdam':'The Netherlands','Bruxelles':'Belgium','Madrid':'Spain','Lisbon':'Portugal','Rome':'Italie','Vienna':'Austria','Zurich':'Zwitserland','Oslo':'Norway','Stockholm':'Sweden','Helsinki':'Finland','Moscow':'Russia'}
+
+
+#city_list = ['Copenhagen','Warsaw','London','Berlin','Amsterdam','Paris']
 #city_list = ['London']
-country_dic = {'Copenhagen': 'Denmark', 'London': 'England','Berlin':'Germany','Amsterdam':'Nederland','Paris':'France','Warsaw':'Poland'}
-lang_dic = {'Copenhagen':'da','London':'en','Berlin':'de','Amsterdam':'nl','Paris':'fr','Warsaw':'pl'}
+lang_dic = {'Copenhagen':'da','Berlin':'de','Warsaw':'pl','Paris':'fr','London':'en','Dublin':'en','Amsterdam':'nl','Bruxelles':'fr','Madrid':'es','Lisbon':'pt','Rome':'it','Vienna':'de','Zurich':'de','Oslo':'no','Stockholm':'sv','Helsinki':'fi','Moscow':'ru'}
 
 def lat_long(city):
   country = country_dic[city]
@@ -85,7 +88,7 @@ def get_tweets_city(city, day):
       resp_tweets = response.json()['statuses']
     except:
       print(response.json())
-      sys.exit(0)
+      return tweets
       
 
     for tweet in resp_tweets:
@@ -105,13 +108,17 @@ def get_tweets_city(city, day):
   return tweets
 
 def get_all_tweets(city_list,day = None):
+  json_name = 'json/'+day+'.json'
   ret_tweets = {}
-  for city in city_list:
+  if os.path.isfile(json_name):
+    ret_tweets = json.load(open(json_name,'r'))
+
+  for city in (set(city_list)-set(ret_tweets.keys())):
     ret_tweets[city] = get_tweets_city(city,day)
 
-  with open('json/'+day+'.pickle','w') as f:
+  with open(json_name,'w') as f:
     json.dump(ret_tweets,f) 
 
   return ret_tweets
 
-get_all_tweets(city_list,'2018-04-07')
+get_all_tweets(city_list,'2018-04-08')
