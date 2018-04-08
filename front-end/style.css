@@ -1,3 +1,13 @@
+body {
+  font-family: 'Righteous';
+  font-size: 30px;
+  color: #090909;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 .loader-container{
   /* max-width: 500px; */
   text-align: center;
@@ -21,11 +31,124 @@
   100% { transform: rotate(360deg); }
 }
 
+.hoverinfo{
+  font-size: 25px !important;
+  padding: 10px !important;
+}
+
+.hoverinfo .price{
+  display: block;
+  font-weight: 900;
+  padding-top: 15px;
+}
+
+.hoverinfo .name{
+  display: block;
+}
+
+.hoverinfo .date{
+  display: block;
+  font-size: 15px;
+  text-align: right;
+}
+
+.hoverinfo .yourehere{
+  font-weight: 900;
+}
+
+.hoverinfo .sentimentString {
+  text-align: center !important;
+  font-size: 18px;
+}
+
+#logo{
+  position: absolute; 
+  width: 300px; 
+  height: 80px; 
+  top: 37; 
+  left: 55; 
+  font-size: 45px;
+}
+
 #flightsTable{
   position: absolute;
-  bottom: 20;
-  left: 20;
-  height: 500px;
+  bottom: 40;
+  left: 40;
+  padding: 20px;
+  height: 540px;
+  width: 340px;
+  background: #FCFCFC;
+  border-radius: 10px;
+  border: 1px solid #F1F1F1;
+  font-family: 'Roboto';
+  box-shadow: 0px 0px 10px 1px #AAAAAA;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+#flightsTable .table-row{
+  border-bottom: 1px solid #EEE;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+#flightsTable .table-row:hover{
+  cursor: pointer;
+  color: #FFF !important;
+  text-shadow: 2px 1px #DDD;
+}
+
+#flightsTable .table-row:hover .sentiment{
+  box-shadow: 0px 0px 10px 1px #DDD;
+}
+
+#flightsTable .left{
+  color: #666666;
+  width: 50%;
+}
+
+#flightsTable .right{
+  width: 50%;
+  color: #222222;
+  text-align: right;
+}
+
+.flex-parent{
+  display: flex;
+  flex-flow: row wrap;
+  align-content: space-between;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.sentiment{
+  height: 5px;
+  display: block;
+  border-radius: 3px;
+  box-shadow: 0px 0px 10px 1px #EEE;
+}
+
+.sentiment-1{
+  background-color: #FF0000;
+  width: 60px;
+}
+
+.sentiment-2{
+  background-color: #FF6900;
+  width: 120px;
+}
+
+.sentiment-3{
+  background-color: #FFE400;
+  width: 160px;
+}
+
+.sentiment-4{
+  background-color: #8DFF00;
+  width: 240px;
+}
+
+.sentiment-5{
+  background-color: #00FF00;
   width: 300px;
-  background: #3498db;
 }
