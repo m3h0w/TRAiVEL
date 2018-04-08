@@ -2,9 +2,11 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script>
 <script src="/datamaps.world.min.js"></script>
 <link href='https://fonts.googleapis.com/css?family=Righteous' rel='stylesheet'>
-<link rel="stylesheet" type="text/css" href="index_style.css">
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="style.css">
 
-<div id="logo" style="position: absolute; width: 300px; height: 80px; bottom: 10; left: 50; font-size: 45px">> TRAiVEL ></div>
+<div id="logo">> TRAiVEL ></div>
+<div id="flightsTable"></div>
 <div id="container" style="position: relative; width: 100%; height: 100%;"></div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -66,6 +68,19 @@
   //   return { key: responseData[key]["sentiment"] }
   // });
 
+  function getSentimentBin(value){
+    if(value < 0.20)
+      return 1
+    if(value < 0.4)
+      return 2
+    if(value < 0.6)
+      return 3
+    if(value < 0.8)
+      return 4
+    else
+      return 5
+  }
+
   function do_loading(){
     var mydiv = document.getElementById("container");
     mydiv.innerHTML = '<div class="loader-container"><div class="loader"></div></div>';
@@ -106,6 +121,22 @@
       "#12FF00",
       "#00FF00"
     ]
+
+  var flightsTable = document.getElementById("flightsTable");
+    var html = ""
+    Object.keys(responseData).forEach(function(key) {
+      html = html + 
+        "<div class='table-row flex-parent'>" +
+          "<div class='left'>" +
+            responseData[key].city +
+          "</div>" +
+          "<div class='right'>" +
+            responseData[key]['flight'].price + '€' +
+          "</div>" +
+          "<div class='sentiment sentiment-" + getSentimentBin(responseData[key]['sentiment']).toString() + "'></div>" +
+        "</div>"
+    });
+    flightsTable.innerHTML = html;
 
   var minSentiment = 0;
   var maxSentiment = 1
@@ -158,11 +189,13 @@
   console.log(arcsList)
 
   function mapSentimentToString(value){
-    if(value < 0.25)
+    if(value < 0.20)
       return 'Sad :('
-    if(value < 0.5)
-      return 'Neutral :|'
-    if(value < 0.75)
+    if(value < 0.4)
+      return 'Could be better :|'
+    if(value < 0.6)
+      return 'Kinda ok'
+    if(value < 0.8)
       return 'Happy :)'
     else
       return 'Ecstatic! O_O'
