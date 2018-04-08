@@ -14,59 +14,51 @@
 <script>
   async function get_data(){
     do_loading()
-    // await axios.get('http://127.0.0.1:8001/get_data')
-    // .then(function(response){
-    //   responseData = response.data
-    //   // names_list = data.map(el => el.name)
-    //   console.log(responseData); // ex.: { user: 'Your User'}
-    //   console.log(response.status); // ex.: 200
-    //   // document.getElementById("personas").innerHTML = data;
+    await axios.get('http://127.0.0.1:8001/get_data')
+    .then(function(response){
+      responseData = response.data
+      // names_list = data.map(el => el.name)
+      console.log(responseData); // ex.: { user: 'Your User'}
+      console.log(response.status); // ex.: 200
+      // document.getElementById("personas").innerHTML = data;
 
-    //   // document.getElementById('personas').appendChild(makeRB(data));
-    //   return
-    // });
-    var responseData = {
-      "POL": {
-        "city": "Warsaw",
-        "location": {
-          "latitude": 52.2297,
-          "longitude": 21.0122
-        },
-        "sentiment": 0.5,
-        "flight": {
-          "price": 200,
-          "date": "01.02.1993",
-          "airlineLogo": "lot.png"
-        }
-      },
-      "ESP": {
-        "city": "Madrid",
-        "location": {
-          "latitude": 40.4168,
-          "longitude": -3.7038
-        },
-        "sentiment": 1,
-        "flight": {
-          "price": 100,
-          "date": "30.02.2018",
-          "airlineLogo": "lot.png"
-        }
-      }
-    }
+      // document.getElementById('personas').appendChild(makeRB(data));
+      return
+    });
+    // var responseData = {
+    //   "POL": {
+    //     "city": "Warsaw",
+    //     "location": {
+    //       "latitude": 52.2297,
+    //       "longitude": 21.0122
+    //     },
+    //     "sentiment": 0.5,
+    //     "flight": {
+    //       "price": 200,
+    //       "date": "01.02.1993",
+    //       "airlineLogo": "lot.png"
+    //     },
+    //     "link": "https://www.google.com/"
+    //   },
+    //   "ESP": {
+    //     "city": "Madrid",
+    //     "location": {
+    //       "latitude": 40.4168,
+    //       "longitude": -3.7038
+    //     },
+    //     "sentiment": 1,
+    //     "flight": {
+    //       "price": 100,
+    //       "date": "30.02.2018",
+    //       "airlineLogo": "lot.png"
+    //     },
+    //     "link": "https://www.google.com/"
+    //   }
+    // }
     all(responseData);
     return responseData;
   }
   get_data();
-
-  // console.log("response", responseData);
-
-  // var colorSetup = responseData.map(function(el){
-  //   console.log(el);
-  // })
-
-  // colorSetup = Object.keys(responseData).map(function(key, index) {
-  //   return { key: responseData[key]["sentiment"] }
-  // });
 
   function getSentimentBin(value){
     if(value < 0.20)
@@ -126,6 +118,7 @@
     var html = ""
     Object.keys(responseData).forEach(function(key) {
       html = html + 
+      "<a href='"+responseData[key].link+"'>" +
         "<div class='table-row flex-parent'>" +
           "<div class='left'>" +
             responseData[key].city +
@@ -134,7 +127,8 @@
             responseData[key]['flight'].price + '€' +
           "</div>" +
           "<div class='sentiment sentiment-" + getSentimentBin(responseData[key]['sentiment']).toString() + "'></div>" +
-        "</div>"
+        "</div>" +
+      "</a>"
     });
     flightsTable.innerHTML = html;
 
@@ -167,7 +161,7 @@
     previous[current] = { 
       fillKey: current, 
       price: responseData[current]['flight']['price'],
-      date: responseData[current]['flight']['date'],
+      date: responseData[current]['flight']['outdate'],
       city: responseData[current]['city'],
       sentiment: responseData[current]['sentiment']
     };
@@ -176,7 +170,7 @@
   dataSetup['DNK'] = {fillKey: 'DNK', city: 'Copenhagen' };
 
   var arcsList = []
-  var nothing = Object.keys(responseData).reduce(function(previous, current) {
+  Object.keys(responseData).reduce(function(previous, current) {
     arcsList.push( {
     origin: {
       latitude: 55.6761,
@@ -229,7 +223,8 @@
         '</div>' +
         '<div class="sentimentString"><i>' +
         mapSentimentToString(data.sentiment) + '' +
-        '</i></div>'
+        '</i></div>' +
+        '<div class="limit-width sentiment sentiment-' + getSentimentBin(data['sentiment']).toString() + '"></div>'
       }
     },
     highlightBorderWidth: 3
