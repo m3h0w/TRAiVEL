@@ -1,7 +1,10 @@
-import re, os
+import re, os, sys
 import geopy
 from TwitterAPI import TwitterAPI
 from geopy.geocoders import Nominatim
+import pickle
+import datetime
+import json
 
 tw_api_key = os.environ['TW_API_KEY']
 tw_api_key_sec = os.environ['TW_API_SEC']
@@ -10,8 +13,9 @@ tw_acc_token_sec = os.environ['TW_ACC_TOKEN_SEC']
 
 api = TwitterAPI(tw_api_key, tw_api_key_sec, tw_acc_token, tw_acc_token_sec)
 
-max_tweets = 300
-city_list = ['Copenhagen','Warsaw']
+max_tweets = 2000
+city_list = ['Copenhagen','Warsaw','London','Berlin','Amsterdam','Paris']
+#city_list = ['London']
 country_dic = {'Copenhagen': 'Denmark', 'London': 'England','Berlin':'Germany','Amsterdam':'Nederland','Paris':'France','Warsaw':'Poland'}
 lang_dic = {'Copenhagen':'da','London':'en','Berlin':'de','Amsterdam':'nl','Paris':'fr','Warsaw':'pl'}
 
@@ -57,40 +61,57 @@ def transform_tweet(x):
   
   return res.strip()
 
-def get_tweets_city(city):
+def get_tweets_city(city, day):
   # get the tweets around a certain city
   # Calculate the lat lon of the city
   loc = lat_long(city)+',10km'
   language = lang_dic[city]
-
+  upperdate = datetime.datetime.strptime(day + ' +0000', '%Y-%m-%d %z')
   num_tweets = 0
   last_tweet_id = 0
-  
+  print(city)
   tweets = []
-  while len(tweets) < max_tweets:
+  diff = 0
+  while num_tweets < max_tweets:
     if last_tweet_id == 0:
-      response = api.request('search/tweets', params= {'count': 100, 'lang':language, 'geocode':loc})
+      if day == None:
+        response = api.request('search/tweets', params= {'count': 100, 'lang':language,'geocode':loc})
+      else:
+        response = api.request('search/tweets', params= {'count': 100, 'lang':language,'until':day,'geocode':loc})
     else:
-      response = api.request('search/tweets', params= {'count': 100, 'lang':language, 'geocode':loc, 'max_id': last_tweet_id})
-      
-    resp_tweets = response.json()['statuses']
+      response = api.request('search/tweets', params= {'count': 100, 'lang':language,'geocode':loc, 'max_id': last_tweet_id})
     
+    try:
+      resp_tweets = response.json()['statuses']
+    except:
+      print(response.json())
+      sys.exit(0)
+      
+
     for tweet in resp_tweets:
       text = tweet['text']
       text = transform_tweet(text)
 
       tweets.append(text)
-  
+
+    num_tweets = len(tweets)
     last_tweet = resp_tweets[-1]
     last_tweet_id = last_tweet['id']
+    last_time = datetime.datetime.strptime(last_tweet['created_at'],'%a %b %d %H:%M:%S %z %Y')
+    diff = (upperdate-last_time).days
+    print('Last Batch ', last_tweet['created_at'],diff)
+
+  print('First tweet',resp_tweets[-1]['created_at'])
   return tweets
 
-def get_all_tweets(city_list):
+def get_all_tweets(city_list,day = None):
   ret_tweets = {}
   for city in city_list:
-    ret_tweets[city] = get_tweets_city(city)
-  
-  return ret_tweets
-  
+    ret_tweets[city] = get_tweets_city(city,day)
 
-print(get_all_tweets(city_list))
+  with open('json/'+day+'.pickle','w') as f:
+    json.dump(ret_tweets,f) 
+
+  return ret_tweets
+
+get_all_tweets(city_list,'2018-04-07')
