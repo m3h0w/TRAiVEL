@@ -83,18 +83,17 @@ def get_sentiment_list_from_azure(sentence_list,language=None):
 
   documents = {'documents':[]}
   for i in range(len(sentence_list)):
-    documents['documents'].append({'id':str(i+1),'language':language_list[i],'text':sentence_list[i]})
+    if i < 999:
+      documents['documents'].append({'id':str(i+1),'language':language_list[i],'text':sentence_list[i]})
 
-
+  print(len(documents['documents']))
   # import requests
-  from pprint import pprint
 
   headers   = {"Ocp-Apim-Subscription-Key": subscription_key}
   response  = requests.post(sentiment_api_url, headers=headers, json=documents)
   sentiments = response.json()
   sentiment_list = [sent['score'] for sent in sentiments['documents']]
 
-  print(sentiment_list)
   return sentiment_list
 
 
