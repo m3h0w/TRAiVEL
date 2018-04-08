@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 
 <div id="logo">> TRAiVEL ></div>
+<div id="slogan">Happy is a destination!</div>
 <div id="flightsTable"></div>
 <div id="container" style="position: relative; width: 100%; height: 100%;"></div>
 
@@ -152,7 +153,7 @@
     return previous;
   }, {});
   fillsSetup['defaultFill'] = "#AAA"
-  fillsSetup['DNK'] = "#AAAAFF"
+  fillsSetup['DNK'] = "#555"
   fillsSetup['RED'] = "#EE1111"
   console.log(fillsSetup)
 
@@ -161,7 +162,8 @@
     previous[current] = { 
       fillKey: current, 
       price: responseData[current]['flight']['price'],
-      date: responseData[current]['flight']['outdate'],
+      outdate: responseData[current]['flight']['outdate'],
+      indate: responseData[current]['flight']['indate'],
       city: responseData[current]['city'],
       sentiment: responseData[current]['sentiment']
     };
@@ -216,7 +218,7 @@
         return '<div class="hoverinfo">' +
         '<div class="name">' + geography.properties.name + ', ' + data.city + '</div>' +
         '<div class="date">' +
-        'Date: ' +  data.date + ' ' +
+        'Friday ' +  data.outdate.substr(data.outdate.length - 8) + ' - Sunday ' + data.indate.substr(data.indate.length - 8) +
         '</div>' +
         '<div class="price">' +
         'Price: ' +  data.price + ' ' +

@@ -3,6 +3,7 @@ import requests
 import datetime
 import pandas as pd
 import numpy as np
+import json
 
 API_KEY = 'ha476781313606041651912031584670'
 HOST = 'http://partners.api.skyscanner.net/apiservices/{endpoint}'
@@ -87,14 +88,22 @@ def get_cheapest_price_for_flight(origin,destination,start,end,currency='EUR'):
          'OutboundLegArrive':raw['Legs'][0]['Arrival']}
   return out
 
-def get_prices_from_cities(cities,start_date,end_date,origin_city='Copenhagen',currency='EUR'):
+def save_prices_from_cities(cities,start_date,end_date,origin_city='Copenhagen',currency='EUR'):
   origin_city_code = get_city_codes_from_cities([origin_city])[origin_city]
   dest_city_codes = get_city_codes_from_cities(cities)
   price_data = {}
   for dest_city,dest_city_code in dest_city_codes.items():
     price_data[dest_city] = get_cheapest_price_for_flight(origin_city_code,dest_city_code,start_date,end_date)
-  return price_data
 
-# start,end = get_next_friday_sunday()
+  with open('json/04-08.json','w') as f:
+    json.dump(price_data, f)
+
+def get_prices_from_cities(cities):
+  data = json.load(open('json/04-08.json', encoding='utf8'))
+  filtered_data = { key: data[key] for key in data.keys() }
+  return filtered_data
+
 # print(get_prices_from_cities(['Amsterdam','Berlin','Warsaw','Moscow'],start,end,origin_city='Copenhagen',currency='EUR')['Amsterdam'])
-
+# start_date, end_date = get_next_friday_sunday()
+# possible_cities = ['Berlin','Warsaw','Paris','London','Dublin','Amsterdam','Bruxelles','Madrid','Lisbon','Rome','Vienna','Zurich','Oslo','Stockholm','Helsinki','Moscow']
+# save_prices_from_cities(possible_cities, start_date, end_date)

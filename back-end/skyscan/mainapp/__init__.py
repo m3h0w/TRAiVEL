@@ -15,8 +15,7 @@ def get_prices():
   if 'cities_list' in request.json and isinstance(request.json['cities_list'], list):
     strings_list = request.json['cities_list']
 
-  start,end = get_next_friday_sunday()
-  data = get_prices_from_cities(strings_list,start,end,origin_city='Copenhagen',currency='EUR')
+  data = get_prices_from_cities(strings_list)
   
   # month = "2018-04"
   # if 'month' in request.json and isinstance(request.json['month'], str):

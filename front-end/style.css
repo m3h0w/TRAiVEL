@@ -77,11 +77,27 @@ a:hover
 
 #logo{
   position: absolute; 
-  width: 300px; 
+  color: #7777ee;
+  width: 400px; 
   height: 80px; 
   top: 37; 
   left: 55; 
-  font-size: 45px;
+  font-size: 56px;
+  text-shadow: 1px 1px #EEE;
+  z-index: 1;
+}
+
+#slogan{
+  position: absolute; 
+  color: #333;
+  width: 500px; 
+  height: 80px; 
+  top: 90; 
+  left: 55; 
+  font-size: 30px;
+  font-family: "Roboto";
+  text-shadow: 2px 1px #EEE;
+  z-index: 1;
 }
 
 #flightsTable{
@@ -98,6 +114,7 @@ a:hover
   box-shadow: 0px 0px 10px 1px #AAAAAA;
   box-sizing: border-box;
   z-index: 1;
+  overflow: auto;
 }
 
 #flightsTable .table-row{
@@ -110,6 +127,7 @@ a:hover
   cursor: pointer;
   color: #FFF !important;
   text-shadow: 2px 1px #DDD;
+  border-bottom: 1px solid #aaaaff;
 }
 
 #flightsTable .table-row:hover .sentiment{
