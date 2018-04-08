@@ -121,4 +121,4 @@ def get_all_tweets(city_list,day = None):
 
   return ret_tweets
 
-get_all_tweets(city_list,'2018-04-08')
+# get_all_tweets(city_list,'2018-04-08')

@@ -96,7 +96,7 @@ a:hover
   left: 55; 
   font-size: 30px;
   font-family: "Roboto";
-  text-shadow: 2px 1px #EEE;
+  text-shadow: 1px 1px #EEE;
   z-index: 1;
 }
 

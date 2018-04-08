@@ -1,6 +1,7 @@
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import numpy as np
 import requests
+import json
 
 def get_sentiment_list(sentences):
   sa = SentimentIntensityAnalyzer()
@@ -95,7 +96,6 @@ def get_sentiment_list_from_azure(sentence_list,language=None):
   sentiment_list = [sent['score'] for sent in sentiments['documents']]
 
   return sentiment_list
-
 
 # sent = ['This is great, I am so happy','omg, life sucks so much']
 

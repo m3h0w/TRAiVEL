@@ -30,15 +30,16 @@ def get_lat_longs(city_list):
     loc_dict[i] = loc
   return loc_dict
 
-country_dic = {'Copenhagen': 'Denmark', 'London': 'England','Berlin':'Germany','Amsterdam':'Nederland','Paris':'France','Warsaw':'Poland', 'Moscow': 'Russia'}
-lang_dic = {'Copenhagen':'da','London':'en','Berlin':'de','Amsterdam':'nl','Paris':'fr','Warsaw':'pl', 'Russia':'ru'}
+city_list = ['Lisbon','Rome','Vienna','Zurich','Oslo','Stockholm','Helsinki','Moscow','Copenhagen','Berlin','Warsaw','Paris','London','Dublin','Amsterdam','Bruxelles','Madrid']
+country_dic = {'Copenhagen':'Denmark','Berlin':'Germany','Warsaw':'Poland','Paris':'France','London':'England','Dublin':'Ireland','Amsterdam':'The Netherlands','Bruxelles':'Belgium','Madrid':'Spain','Lisbon':'Portugal','Rome':'Italie','Vienna':'Austria','Zurich':'Zwitserland','Oslo':'Norway','Stockholm':'Sweden','Helsinki':'Finland','Moscow':'Russia'}
+lang_dic = {'Copenhagen':'da','Berlin':'de','Warsaw':'pl','Paris':'fr','London':'en','Dublin':'en','Amsterdam':'nl','Bruxelles':'fr','Madrid':'es','Lisbon':'pt','Rome':'it','Vienna':'de','Zurich':'de','Oslo':'no','Stockholm':'sv','Helsinki':'fi','Moscow':'ru'}
 
 @app.route("/get_data", methods=['GET'])
 def get_data():
-  cities = ['Paris','Berlin','Warsaw','London']
-  countries = ['FRA', 'DEU', 'POL', 'GBR']
+  cities = ['Lisbon','Rome','Vienna','Zurich','Oslo','Stockholm','Helsinki','Moscow','Berlin','Warsaw','Paris','London','Dublin','Amsterdam','Bruxelles','Madrid']
+  countries = ['PRT', 'ITA', 'AUT', 'CHE', 'NOR', 'SWE', 'FIN', 'RUS', 'DEU','POL', 'FRA', 'GBR', 'IRL', 'NLD', 'BEL', 'ESP']
   # countries = ["POL", "ESP"]
-  sentiments = get_sentiment(cities)
+  sentiments = get_sentiment_from_file(cities)
   flights_raw = get_flights(cities)
   
   data = {}
@@ -83,8 +84,8 @@ def get_data():
   return jsonify(data)
 
 def get_sentiment(cities):
-  data = json.load(open('../scrapping/json/04-08.json', encoding='utf8'))
-  lang_dic = {'Copenhagen':'da','London':'en','Berlin':'de','Amsterdam':'nl','Paris':'fr','Warsaw':'pl'}
+  data = json.load(open('../scrapping/json/2018-04-08.json', encoding='utf8'))
+  # lang_dic = {'Copenhagen':'da','London':'en','Berlin':'de','Amsterdam':'nl','Paris':'fr','Warsaw':'pl'}
   # print(cities)
   sentiment_array = []
   for city in cities:
@@ -93,8 +94,17 @@ def get_sentiment(cities):
     json_data = json.loads(r.text)
     sentiment_array.append(np.mean(json_data))
   #return [np.mean(json_data), np.mean(json_data) - 0.2]
-  print(sentiment_array)
+  with open('json/sent.json','w') as f:
+    json.dump(sentiment_array,f)
+
   return sentiment_array
+
+def get_sentiment_from_file(cities):
+  sentiment_list = json.load(open('json/sent.json', encoding='utf8'))
+  if len(sentiment_list) != len(cities):
+    return get_sentiment(cities)
+  
+  return sentiment_list
 
 def get_flights(cities):
   payload = {"cities_list": cities}
