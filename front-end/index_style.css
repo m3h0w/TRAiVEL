@@ -1,3 +1,9 @@
+body {
+  font-family: 'Righteous';
+  font-size: 30px;
+  color: "#DDEEDD"
+}
+
 .loader-container{
   /* max-width: 500px; */
   text-align: center;
@@ -22,15 +28,33 @@
 }
 
 .hoverinfo{
-
+  font-size: 25px !important;
+  padding: 10px !important;
 }
 
 .hoverinfo .price{
   display: block;
+  font-weight: 900;
+  padding-top: 15px;
 }
 
 .hoverinfo .name{
   display: block;
+}
+
+.hoverinfo .date{
+  display: block;
+  font-size: 15px;
+  text-align: right;
+}
+
+.hoverinfo .yourehere{
+  font-weight: 900;
+}
+
+.hoverinfo .sentimentString {
+  text-align: center !important;
+  font-size: 18px;
 }
 
 #flightsTable{
