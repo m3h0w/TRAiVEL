@@ -47,6 +47,7 @@ def get_city_codes_from_cities(cities):
 
 
 def get_cheapest_price_for_flight(origin,destination,start,end,currency='EUR'):
+  print(origin, destination, start, end)
   assert isinstance(start,str)
   assert isinstance(end,str)
   
@@ -94,6 +95,6 @@ def get_prices_from_cities(cities,start_date,end_date,origin_city='Copenhagen',c
     price_data[dest_city] = get_cheapest_price_for_flight(origin_city_code,dest_city_code,start_date,end_date)
   return price_data
 
-#start,end = get_next_friday_sunday()
-#get_prices_from_cities(['Amsterdam','Berlin','Warsaw','Moscow'],start,end,origin_city='Copenhagen',currency='EUR')
+# start,end = get_next_friday_sunday()
+# print(get_prices_from_cities(['Amsterdam','Berlin','Warsaw','Moscow'],start,end,origin_city='Copenhagen',currency='EUR')['Amsterdam'])
 

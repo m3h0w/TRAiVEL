@@ -9,16 +9,37 @@ import numpy as np
 
 from flask_cors import CORS
 
+from geopy.geocoders import Nominatim
+# from requests import async
+
 app = Flask(__name__, static_url_path='/static')
 CORS(app)
 
+def lat_long(city):
+  country = country_dic[city]
+  loc = city+', '+country
+
+  geolocator = Nominatim()
+  location = geolocator.geocode(loc)
+  return {"latitude": location.latitude, "longitude": location.longitude}
+
+def get_lat_longs(city_list):
+  loc_dict = {}
+  for i in city_list:
+    loc = lat_long(city)
+    loc_dict[i] = loc
+  return loc_dict
+
+country_dic = {'Copenhagen': 'Denmark', 'London': 'England','Berlin':'Germany','Amsterdam':'Nederland','Paris':'France','Warsaw':'Poland', 'Moscow': 'Russia'}
+lang_dic = {'Copenhagen':'da','London':'en','Berlin':'de','Amsterdam':'nl','Paris':'fr','Warsaw':'pl', 'Russia':'ru'}
+
 @app.route("/get_data", methods=['GET'])
 def get_data():
-  cities = ["Warsaw", "Madrid"]
-  countries = ["POL", "ESP"]
+  cities = ['Paris','Berlin','Warsaw','London']
+  countries = ['FRA', 'DEU', 'POL', 'GBR']
+  # countries = ["POL", "ESP"]
   sentiments = get_sentiment(cities)
-  flights_raw = get_flights(cities, "2018-04")
-  
+  flights_raw = get_flights(cities)
   
   data = {}
   for index, country in enumerate(countries):
@@ -28,9 +49,12 @@ def get_data():
       "sentiment": sentiments[index], 
       "flight": {
         "price": flight["Price"],
-        "data": flight["InboundLegDepart"],
-        "airlineLogo": flight["InboundCarrier"] + ".png"
-      }
+        "outdate": flight["OutboundLegDepart"],
+        "indate": flight["InboundLegDepart"],
+        "airline": flight["InboundCarrier"]
+      },
+      "link": flight['url'],
+      "location": lat_long(cities[index])      
     } 
 
   # print(data)
@@ -59,14 +83,9 @@ def get_data():
   return jsonify(data)
 
 def get_sentiment(cities):
-  #data = json.load(open('mainapp/tweets.json', encoding="utf8"))
-  #the_list = [el[0] for el in data['tweets']]
-  #payload = {"text_list": the_list}
-
   data = json.load(open('../scrapping/json/04-08.json', encoding='utf8'))
-
   lang_dic = {'Copenhagen':'da','London':'en','Berlin':'de','Amsterdam':'nl','Paris':'fr','Warsaw':'pl'}
-  print(cities)
+  # print(cities)
   sentiment_array = []
   for city in cities:
     payload  = {'text_list':data[city],'language':lang_dic[city]}
@@ -77,11 +96,10 @@ def get_sentiment(cities):
   print(sentiment_array)
   return sentiment_array
 
-
-def get_flights(cities, month):
+def get_flights(cities):
   payload = {"cities_list": cities}
   r = requests.post('http://127.0.0.1:8003/get_prices', json = payload)
   json_data = json.loads(r.text)
   return json_data
 
-get_sentiment(['Amsterdam','Berlin','Copenhagen','Warsaw'])
+# get_sentiment(['Amsterdam','Berlin','Copenhagen','Warsaw'])
