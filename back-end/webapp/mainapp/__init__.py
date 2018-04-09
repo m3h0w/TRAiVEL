@@ -83,6 +83,33 @@ def get_data():
 
   return jsonify(data)
 
+@app.route("/get_data_madrid", methods=['GET'])
+def get_data_madrid():
+  cities = ['Lisbon','Rome','Vienna','Zurich','Oslo','Stockholm','Helsinki','Moscow','Berlin','Warsaw','Paris','London','Dublin','Amsterdam','Bruxelles','Madrid']
+  countries = ['PRT', 'ITA', 'AUT', 'CHE', 'NOR', 'SWE', 'FIN', 'RUS', 'DEU','POL', 'FRA', 'GBR', 'IRL', 'NLD', 'BEL', 'ESP']
+  # countries = ["POL", "ESP"]
+  # sentiments = get_sentiment_from_file(cities)
+  sentiments = [0.464172018988058, 0.5249947293065488, 0.5177478067409247, 0.5073912304509431, 0.5013169356137515, 0.5684756477922202, 0.627079818636179, 0.5072345736026764, 0.5469414733164012, 0.6184176307711751, 0.4788615402765572, 0.5168948508501053, 0.5299666111767292, 0.5673802295923233, 0.5039202862847596, 0.7503749640733004]
+  flights_raw = get_flights(cities)
+  
+  data = {}
+  for index, country in enumerate(countries):
+    flight = flights_raw[cities[index]]
+    data[country] = {
+      "city": cities[index], 
+      "sentiment": sentiments[index], 
+      "flight": {
+        "price": flight["Price"],
+        "outdate": flight["OutboundLegDepart"],
+        "indate": flight["InboundLegDepart"],
+        "airline": flight["InboundCarrier"]
+      },
+      "link": flight['url'],
+      "location": lat_long(cities[index])      
+    }
+
+  return jsonify(data)
+
 def get_sentiment(cities):
   data = json.load(open('../scrapping/json/2018-04-08.json', encoding='utf8'))
   # lang_dic = {'Copenhagen':'da','London':'en','Berlin':'de','Amsterdam':'nl','Paris':'fr','Warsaw':'pl'}

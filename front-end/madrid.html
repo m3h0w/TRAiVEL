@@ -15,7 +15,7 @@
 <script>
   async function get_data(){
     do_loading()
-    await axios.get('http://127.0.0.1:8001/get_data')
+    await axios.get('http://127.0.0.1:8001/get_data_madrid')
     .then(function(response){
       responseData = response.data
       // names_list = data.map(el => el.name)

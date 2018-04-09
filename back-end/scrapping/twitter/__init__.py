@@ -114,6 +114,7 @@ def get_all_tweets(city_list,day = None):
 
   for city in (set(city_list)-set(ret_tweets.keys())):
     ret_tweets[city] = get_tweets_city(city,day)
+    
 
     with open(json_name,'w') as f:
       json.dump(ret_tweets,f) 
